@@ -1,0 +1,5 @@
+- name: Rollback MetalLB
+  hosts: master
+  become: true
+  roles:
+    - metallb-rollback

@@ -1,0 +1,5 @@
+- name: Base setup for all nodes
+  hosts: all
+  become: true
+  roles:
+    - common

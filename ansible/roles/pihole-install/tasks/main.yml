@@ -1,0 +1,38 @@
+- name: Create pihole namespace
+  kubernetes.core.k8s:
+    state: present
+    kind: Namespace
+    name: pihole
+    kubeconfig: "{{ kubeconfig_path }}"
+  delegate_to: localhost
+  vars:
+    ansible_python_interpreter: "{{ lookup('env','HOME') }}/.ansible-k8s/bin/python"
+
+- name: Add Pi-hole Helm repo
+  kubernetes.core.helm_repository:
+    name: mojo2600
+    repo_url: https://mojo2600.github.io/pihole-kubernetes/
+  delegate_to: localhost
+  vars:
+    ansible_python_interpreter: "{{ lookup('env','HOME') }}/.ansible-k8s/bin/python"
+
+- name: Update Helm repos
+  command: helm repo update
+  delegate_to: localhost
+  vars:
+    ansible_python_interpreter: "{{ lookup('env','HOME') }}/.ansible-k8s/bin/python"
+
+- name: Copy Pi-hole values.yaml to localhost
+  copy:
+    src: "{{ lookup('env','HOME') }}/proyecto/k8s/pihole/values.yaml"
+    dest: /tmp/pihole-values.yaml
+  delegate_to: localhost
+
+- name: Install Pi-hole via Helm
+  command: >
+    helm upgrade --install pihole mojo2600/pihole
+    --namespace pihole
+    -f /tmp/pihole-values.yaml
+  delegate_to: localhost
+  vars:
+    ansible_python_interpreter: "{{ lookup('env','HOME') }}/.ansible-k8s/bin/python"

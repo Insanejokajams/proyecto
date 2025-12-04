@@ -1,0 +1,33 @@
+- name: Create metallb-system namespace
+  command: kubectl create namespace metallb-system
+  ignore_errors: true
+
+- name: Copy MetalLB native manifest to node
+  copy:
+    src: "{{ playbook_dir }}/../../k8s/metallb/metallb-native.yaml"
+    dest: /tmp/metallb-native.yaml
+
+- name: Apply MetalLB native manifest
+  command: kubectl apply -f /tmp/metallb-native.yaml
+
+- name: Copy MetalLB config to node
+  copy:
+    src: "{{ playbook_dir }}/../../k8s/metallb/metallb-config.yaml"
+    dest: /tmp/metallb-config.yaml
+
+- name: Wait for MetalLB webhook to be ready
+  shell: kubectl -n metallb-system wait --for=condition=Available deployment --all --timeout=120s
+  register: wait_result
+  retries: 5
+  delay: 5
+  until: wait_result.rc == 0
+
+- name: Apply MetalLB config
+  command: kubectl apply -f /tmp/metallb-config.yaml
+
+- name: Wait for MetalLB controller
+  command: kubectl -n metallb-system rollout status deploy/metallb-controller
+  register: controller_rollout
+  until: controller_rollout.rc == 0
+  retries: 20
+  delay: 5

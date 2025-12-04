@@ -1,0 +1,5 @@
+- name: Prepare all nodes for Longhorn
+  hosts: all
+  become: true
+  roles:
+    - longhorn-node-prep

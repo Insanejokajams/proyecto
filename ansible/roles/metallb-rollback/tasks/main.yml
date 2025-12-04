@@ -1,0 +1,15 @@
+- name: Delete metallb-system namespace
+  command: kubectl delete namespace metallb-system --force --grace-period=0
+  ignore_errors: true
+
+- name: Delete MetalLB CRDs
+  shell: |
+    for crd in \
+      ipaddresspools.metallb.io \
+      l2advertisements.metallb.io \
+      bgppeers.metallb.io \
+      bgpadvertisements.metallb.io \
+      bfdprofiles.metallb.io \
+      communities.metallb.io; do
+        kubectl delete crd $crd --ignore-not-found
+    done

@@ -1,0 +1,5 @@
+- name: Install Python dependencies for Kubernetes modules
+  hosts: master
+  become: true
+  roles:
+    - k8s-python-deps

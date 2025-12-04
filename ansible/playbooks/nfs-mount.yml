@@ -1,0 +1,5 @@
+- name: Mount NFS share
+  hosts: all
+  become: true
+  roles:
+    - nfs
