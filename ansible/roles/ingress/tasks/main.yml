@@ -1,0 +1,16 @@
+- name: Copy kubeconfig to remote host
+  copy:
+    src: ../playbooks/kubeconfig/k3s.yaml
+    dest: /home/k8smedia/k3s.yaml
+    mode: '0600'
+
+- name: Deploy ingress
+  kubernetes.core.k8s:
+    state: present
+    definition: "{{ lookup('template', 'ingress.yaml.j2') }}"
+    validate_certs: false
+  environment:
+    K8S_AUTH_KUBECONFIG: "/home/k8smedia/k3s.yaml"
+
+
+
