@@ -1,0 +1,14 @@
+---
+traefik_services:
+  - name: plex
+    port: 32400
+  - name: pihole
+    port: 80
+  - name: sonarr
+    port: 8989
+  - name: radarr
+    port: 7878
+
+
+
+

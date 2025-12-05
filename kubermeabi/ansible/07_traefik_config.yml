@@ -1,0 +1,24 @@
+- name: Configure Traefik base resources
+  hosts: master
+  become: yes
+
+  tasks:
+    - name: Debug traefik_services
+      debug:
+        var: traefik_services
+
+    - name: Load variables
+      debug:
+        msg: "Variables loaded"
+
+  roles:
+    - traefik_config
+
+
+#   ¿Cómo agregar un servicio nuevo?
+#   Solo agregas una línea en traefik_services: (group_vars/all.yml)
+#
+#  - name: ombi
+#    port: 3579
+#    Y ejecutas:
+#    ansible-playbook -i inventory/hosts.yml playbooks/07_traefik_config.yml

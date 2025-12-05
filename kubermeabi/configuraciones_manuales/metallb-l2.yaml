@@ -1,0 +1,10 @@
+#Se creo porque no se encontro un L2Advertisement disponible
+#se ejecuto kubectl apply -f metallb-l2.yaml
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: default
+  namespace: metallb-system
+spec:
+  ipAddressPools:
+    - default

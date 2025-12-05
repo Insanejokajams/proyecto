@@ -1,0 +1,6 @@
+---
+- name: Deploy Pi-hole DNS Server
+  hosts: master
+  become: yes
+  roles:
+    - pihole

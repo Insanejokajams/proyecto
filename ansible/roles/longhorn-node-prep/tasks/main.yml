@@ -1,9 +1,0 @@
-- name: Install Longhorn prerequisites packages
-  become: true
-  apt:
-    name:
-      - open-iscsi
-      - nfs-common
-      - jq
-    state: present
-    update_cache: true

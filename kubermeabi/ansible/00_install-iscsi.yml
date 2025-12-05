@@ -1,0 +1,18 @@
+- name: Install iSCSI dependencies for Longhorn
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Install open-iscsi and nfs-common
+      apt:
+        name:
+          - open-iscsi
+          - nfs-common
+        state: present
+        update_cache: yes
+
+    - name: Enable and start iscsid
+      systemd:
+        name: iscsid
+        enabled: yes
+        state: started

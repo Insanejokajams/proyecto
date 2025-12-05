@@ -1,5 +1,0 @@
-- name: Rollback Pi-hole
-  hosts: master
-  become: true
-  roles:
-    - pihole-rollback

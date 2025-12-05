@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ service.name }}-cert
+  namespace: pods
+spec:
+  secretName: {{ service.name }}-tls
+  issuerRef:
+    name: letsencrypt-http
+    kind: ClusterIssuer
+  dnsNames:
+    - {{ service.name }}.portal.meabi.org

@@ -1,0 +1,29 @@
+---
+
+- name: Ensure Pi-hole config directory exists
+  file:
+    path: "{{ pihole.config_path }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Ensure Pi-hole dnsmasq directory exists
+  file:
+    path: "{{ pihole.dnsmasq_path }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Deploy Pi-hole Deployment
+  kubernetes.core.k8s:
+    state: present
+    namespace: "{{ pihole.namespace }}"
+    definition: "{{ lookup('template', 'deployment.yaml.j2') }}"
+
+- name: Deploy Pi-hole Service (LoadBalancer)
+  kubernetes.core.k8s:
+    state: present
+    namespace: "{{ pihole.namespace }}"
+    definition: "{{ lookup('template', 'service.yaml.j2') }}"

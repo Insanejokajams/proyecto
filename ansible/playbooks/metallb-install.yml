@@ -1,5 +1,0 @@
-- name: Install MetalLB
-  hosts: master
-  become: true
-  roles:
-    - metallb-install

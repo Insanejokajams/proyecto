@@ -1,0 +1,35 @@
+- name: Ensure Plex config directory exists on host
+  file:
+    path: "{{ plex.config_path }}"
+    state: directory
+    mode: '0755'
+
+- name: Deploy Plex Deployment
+  kubernetes.core.k8s:
+    state: present
+    namespace: "{{ plex.namespace }}"
+    template: "{{ role_path }}/templates/deployment.yaml.j2"
+
+- name: Deploy Plex Service
+  kubernetes.core.k8s:
+    state: present
+    namespace: "{{ plex.namespace }}"
+    template: "{{ role_path }}/templates/service.yaml.j2"
+
+- name: Deploy internal certificate for Plex
+  kubernetes.core.k8s:
+    state: present
+    namespace: "{{ plex.namespace }}"
+    template: "{{ role_path }}/templates/certificate-internal.yaml.j2"
+
+- name: Deploy public certificate for Plex
+  kubernetes.core.k8s:
+    state: present
+    namespace: "{{ plex.namespace }}"
+    template: "{{ role_path }}/templates/certificate-public.yaml.j2"
+
+- name: Deploy public IngressRoute for Plex
+  kubernetes.core.k8s:
+    state: present
+    namespace: "{{ plex.namespace }}"
+    template: "{{ role_path }}/templates/ingress-public.yaml.j2"

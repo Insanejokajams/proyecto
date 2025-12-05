@@ -1,9 +1,0 @@
-- name: Install Pi-hole
-  hosts: master
-  become: false
-
-  vars:
-    kubeconfig_path: "{{ lookup('env','HOME') }}/.kube/config"
-
-  roles:
-    - pihole-install

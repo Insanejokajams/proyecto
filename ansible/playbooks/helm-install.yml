@@ -1,5 +1,0 @@
-- name: Install Helm on master node
-  hosts: master
-  become: true
-  roles:
-    - helm-install

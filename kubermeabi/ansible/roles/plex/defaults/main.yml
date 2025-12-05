@@ -1,0 +1,28 @@
+plex:
+  name: plex
+  namespace: pods
+  domain: plex.portal.meabi.org
+  port: 32400
+
+  # Issuers
+  issuer_public: letsencrypt-http
+  issuer_internal: internal-ca
+
+  # Local config path (rápido)
+  config_path: /data/plex/config
+
+  # NAS multimedia
+  media_nfs:
+    server: 10.24.24.2
+    path: /data/Mediafiles
+
+  # Subcarpetas multimedia
+  media_dirs:
+    - Anime
+    - Audio
+    - Movies1080
+    - MoviesUHD
+    - Musicales
+    - TVShows
+    - videos
+    

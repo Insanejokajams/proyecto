@@ -1,0 +1,22 @@
+pihole:
+  name: pihole
+  namespace: pods
+
+  # IP fija de MetalLB para DNS + panel web
+  lb_ip: 10.24.24.81
+
+  # Imagen oficial
+  image: pihole/pihole:latest
+
+  # Directorios persistentes en el nodo
+  config_path: /data/pihole/config
+  dnsmasq_path: /data/pihole/dnsmasq
+
+  # Web UI
+  web_port: 80
+
+  # DNS
+  dns_port: 53
+
+  # Password opcional (si no se define, Pi-hole genera uno)
+  web_password: "changeme"

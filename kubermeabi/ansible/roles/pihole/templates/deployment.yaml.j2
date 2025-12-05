@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ pihole.name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ pihole.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ pihole.name }}
+    spec:
+      containers:
+        - name: pihole
+          image: "{{ pihole.image }}"
+          env:
+            - name: TZ
+              value: "America/Mexico_City"
+            - name: WEBPASSWORD
+              value: "{{ pihole.web_password }}"
+            - name: DNSMASQ_USER
+              value: "root"
+          ports:
+            - containerPort: {{ pihole.web_port }}
+              name: web
+            - containerPort: {{ pihole.dns_port }}
+              name: dns-tcp
+              protocol: TCP
+            - containerPort: {{ pihole.dns_port }}
+              name: dns-udp
+              protocol: UDP
+          volumeMounts:
+            - name: config
+              mountPath: /etc/pihole
+            - name: dnsmasq
+              mountPath: /etc/dnsmasq.d
+      volumes:
+        - name: config
+          hostPath:
+            path: "{{ pihole.config_path }}"
+            type: DirectoryOrCreate
+        - name: dnsmasq
+          hostPath:
+            path: "{{ pihole.dnsmasq_path }}"
+            type: DirectoryOrCreate

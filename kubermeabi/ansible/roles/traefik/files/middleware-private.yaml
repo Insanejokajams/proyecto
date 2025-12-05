@@ -1,0 +1,9 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: private-ip-whitelist
+  namespace: traefik
+spec:
+  ipWhiteList:
+    sourceRange:
+      - "10.24.24.0/24"

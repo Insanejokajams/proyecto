@@ -1,0 +1,73 @@
+- name: Install MetalLB
+  hosts: master
+  become: true
+
+  tasks:
+
+    - name: Apply MetalLB namespace and CRDs
+      command: kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.14.5/config/manifests/metallb-native.yaml
+      args:
+        creates: /var/lib/metallb-installed
+
+    - name: Mark MetalLB as installed
+      file:
+        path: /var/lib/metallb-installed
+        state: touch
+
+    - name: Wait for MetalLB controller to be ready
+      command: kubectl wait --namespace metallb-system --for=condition=available deployment/controller --timeout=90s
+
+    - name: Wait for MetalLB speaker to be ready
+      command: kubectl wait --namespace metallb-system --for=condition=ready daemonset/speaker --timeout=90s
+
+    - name: Create MetalLB IPAddressPool
+      copy:
+        dest: /tmp/metallb-ip-pool.yaml
+        content: |
+          apiVersion: metallb.io/v1beta1
+          kind: IPAddressPool
+          metadata:
+            name: default-pool
+            namespace: metallb-system
+          spec:
+            addresses:
+              - 10.24.24.80-10.24.24.90
+
+    - name: Apply IPAddressPool
+      command: kubectl apply -f /tmp/metallb-ip-pool.yaml
+
+    - name: Create L2Advertisement
+      copy:
+        dest: /tmp/metallb-l2.yaml
+        content: |
+          apiVersion: metallb.io/v1beta1
+          kind: L2Advertisement
+          metadata:
+            name: default-l2
+            namespace: metallb-system
+          spec:
+            ipAddressPools:
+              - default-pool
+
+    - name: Apply L2Advertisement
+      command: kubectl apply -f /tmp/metallb-l2.yaml
+#######
+####### en caso de error con el kubekonfig apuntando a 127.0.0.1
+#######PASO 1 — Verifica si root tiene un kubeconfig
+#Ejecuta:
+
+#bash
+#sudo ls /root/.kube/
+#Si ves:
+
+#
+#config
+#entonces ese es el archivo que está causando el problema.
+
+#✅ PASO 2 — Reemplaza el kubeconfig de root con el correcto
+#Ejecuta:
+
+#bash
+#sudo mkdir -p /root/.kube
+#sudo cp /etc/rancher/k3s/k3s.yaml /root/.kube/config
+#sudo sed -i 's/127.0.0.1/10.24.24.5/g' /root/.kube/config

@@ -1,0 +1,10 @@
+#Se creo manualmente porque no habia un IPAddressPool disponible
+#se aplico con kubectl apply -f metallb-pool.yaml
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: default
+  namespace: metallb-system
+spec:
+  addresses:
+    - 10.24.24.80-10.24.24.100

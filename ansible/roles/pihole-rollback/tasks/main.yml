@@ -1,7 +1,0 @@
-- name: Uninstall Pi-hole Helm release
-  command: helm uninstall pihole -n pihole
-  ignore_errors: true
-
-- name: Delete pihole namespace
-  command: kubectl delete namespace pihole --force --grace-period=0
-  ignore_errors: true

@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ plex.name }}-public-cert
+  namespace: {{ plex.namespace }}
+spec:
+  secretName: {{ plex.name }}-public-tls
+  issuerRef:
+    name: {{ plex.issuer_public }}
+    kind: ClusterIssuer
+  dnsNames:
+    - "{{ plex.domain }}"

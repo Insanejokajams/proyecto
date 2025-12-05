@@ -1,0 +1,20 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ service.name }}-ingress
+  namespace: pods
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`{{ service.name }}.portal.meabi.org`)
+      kind: Rule
+      services:
+        - name: {{ service.name }}
+          port: {{ service.port }}
+      middlewares:
+        - name: redirect-https
+        - name: security-headers
+        - name: compress
+  tls:
+    secretName: {{ service.name }}-tls

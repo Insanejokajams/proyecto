@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-public
+spec:
+  acme:
+    email: admin@meabi.org
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: letsencrypt-public-key
+    solvers:
+      - http01:
+          ingress:
+            class: traefik

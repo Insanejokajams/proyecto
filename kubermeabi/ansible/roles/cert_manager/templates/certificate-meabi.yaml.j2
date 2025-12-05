@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: wildcard-meabi
+  namespace: cert-manager
+spec:
+  secretName: wildcard-meabi-tls
+  issuerRef:
+    name: letsencrypt-http
+    kind: ClusterIssuer
+  dnsNames:
+    - "*.meabi.org"
+    - meabi.org

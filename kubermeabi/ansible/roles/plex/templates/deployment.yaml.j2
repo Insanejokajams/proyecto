@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ plex.name }}
+  namespace: {{ plex.namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ plex.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ plex.name }}
+    spec:
+      containers:
+        - name: plex
+          image: lscr.io/linuxserver/plex:latest
+          ports:
+            - containerPort: {{ plex.port }}
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: TZ
+              value: "America/Mexico_City"
+          volumeMounts:
+            - name: config
+              mountPath: /config
+            - name: media
+              mountPath: /media
+              readOnly: true
+      volumes:
+        - name: config
+          hostPath:
+            path: "{{ plex.config_path }}"
+            type: DirectoryOrCreate
+
+        - name: media
+          nfs:
+            server: "{{ plex.media_nfs.server }}"
+            path: "{{ plex.media_nfs.path }}"

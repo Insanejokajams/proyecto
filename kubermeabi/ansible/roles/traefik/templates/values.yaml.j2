@@ -1,0 +1,25 @@
+additionalArguments:
+  - "--certificatesresolvers.le-http.acme.httpchallenge=true"
+  - "--certificatesresolvers.le-http.acme.httpchallenge.entrypoint=web"
+  - "--certificatesresolvers.le-http.acme.email=admin@meabi.org"
+  - "--certificatesresolvers.le-http.acme.storage=/data/acme.json"
+
+service:
+  type: LoadBalancer
+  loadBalancerIP: "10.24.24.80"
+  spec:
+    externalTrafficPolicy: Cluster
+
+  nodePorts:
+    web: null
+    wspub: null
+    wspriv: null
+
+ingressRoute:
+  dashboard:
+    enabled: false
+
+persistence:
+  enabled: true
+  size: 1Gi
+  storageClass: longhorn

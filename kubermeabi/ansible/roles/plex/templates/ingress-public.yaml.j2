@@ -1,0 +1,19 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ plex.name }}-ingress
+  namespace: {{ plex.namespace }}
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`{{ plex.domain }}`)
+      kind: Rule
+      services:
+        - name: {{ plex.name }}
+          port: {{ plex.port }}
+      middlewares:
+        - name: security-headers
+        - name: redirect-https
+  tls:
+    secretName: {{ plex.name }}-public-tls

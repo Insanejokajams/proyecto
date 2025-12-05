@@ -1,0 +1,7 @@
+---
+- name: Install Traefik Ingress Controller
+  hosts: master
+  become: yes
+
+  roles:
+    - traefik

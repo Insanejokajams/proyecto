@@ -1,0 +1,30 @@
+- name: Ensure namespace 'pods' exists
+  kubernetes.core.k8s:
+    api_version: v1
+    kind: Namespace
+    name: pods
+    state: present
+
+- name: Deploy Traefik middlewares
+  kubernetes.core.k8s:
+    state: present
+    namespace: pods
+    template: "{{ role_path }}/templates/middlewares.yaml.j2"
+
+- name: Deploy certificates for services
+  kubernetes.core.k8s:
+    state: present
+    namespace: pods
+    template: "{{ role_path }}/templates/certificate.yaml.j2"
+  loop: "{{ traefik_services }}"
+  loop_control:
+    loop_var: service
+
+- name: Deploy IngressRoutes for services
+  kubernetes.core.k8s:
+    state: present
+    namespace: pods
+    template: "{{ role_path }}/templates/ingressroute.yaml.j2"
+  loop: "{{ traefik_services }}"
+  loop_control:
+    loop_var: service

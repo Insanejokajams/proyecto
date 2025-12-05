@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: wildcard-home-meabi
+  namespace: cert-manager
+spec:
+  secretName: wildcard-home-meabi-tls
+  issuerRef:
+    name: meabi-ca
+    kind: ClusterIssuer
+  dnsNames:
+    - "*.home.meabi.org"
+    - home.meabi.org

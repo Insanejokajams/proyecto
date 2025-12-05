@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ plex.name }}-internal-cert
+  namespace: {{ plex.namespace }}
+spec:
+  secretName: {{ plex.name }}-internal-tls
+  issuerRef:
+    name: {{ plex.issuer_internal }}
+    kind: ClusterIssuer
+  dnsNames:
+    - "{{ plex.name }}.{{ plex.namespace }}.svc.cluster.local"
+

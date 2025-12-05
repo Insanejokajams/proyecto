@@ -1,9 +1,0 @@
-- name: Install Longhorn on K3s cluster
-  hosts: master
-  become: false
-
-  vars:
-    kubeconfig_path: "{{ lookup('env','HOME') }}/.kube/config"
-
-  roles:
-    - longhorn-install
